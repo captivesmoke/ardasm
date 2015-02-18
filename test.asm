@@ -106,14 +106,14 @@ Loop1:
 	ldi	r22, 8		; Load bit counter
 Loop2:
 	sbi	PortB, PB3
-	nopn	5		; High time 0 bit
+	nopn	2		; High time 0 bit
 	lsl	r23		; Shift the data byte
 	brcs	BitOne
 	cbi	PortB, PB3
-	nopn	5		; Difference between 0 & 1 high time
 BitOne:
+	nopn	4		; Difference between 0 & 1 high time
 	cbi	PortB, PB3
-	nopn	9		; Low time 1 bit
+	nopn	4		; Low time 1 bit
 	dec	r22		; Count the bit
 	brne	Loop2
 	sbiw	r24, 1
