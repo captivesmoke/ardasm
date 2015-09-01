@@ -1,4 +1,4 @@
-AVRA = /home/pi/proj/avra/avra
+AVRA = ~/proj/avra/avra
 INCDIR = /usr/share/avra
 
 test.hex: test.asm
