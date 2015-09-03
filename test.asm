@@ -19,7 +19,7 @@
 ;; D8        (PCINT0/CLKO/ICP1) PB0 |14 15| PB1 (OC1A/PCINT1)       (PWM)D9
 
 ;; Interrupt vector table
-	rjmp	Main		; RESET
+	rjmp	Reset		; RESET
 	reti			; INT0
 	reti			; INT1
 	reti			; PCINT0
@@ -53,7 +53,11 @@ IntrTimer0CompA:
 
 ;;----------------------------------------------------------
 
-Main:
+Reset:
+	ldi	r16, high(RAMEND)
+	out	SPH, r16
+	ldi	r16, low(RAMEND)
+	out	SPL, r16
 	rcall	InitTimer0
 	ldi	r16, 0b00100000
 	out	DDRB, r16
@@ -73,8 +77,8 @@ InitTimer0:
 	out	TCCR0A, r16
 	ldi	r16, (1<<WGM02)|(1<<CS00)
 	out	TCCR0B, r16
-	ldi	r16, 20
+	ldi	r16, 19
 	out	OCR0A, r16
-	ldi	r16, 0
+	ldi	r16, 6
 	out	OCR0B, r16
 	ret
