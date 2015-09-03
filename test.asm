@@ -33,7 +33,7 @@
 	reti			; TIMER1 COMPA
 	reti			; TIMER1 COMPB
 	reti			; TIMER1 OVF
-	reti			; TIMER0 COMPA
+	rjmp	IntrTimer0CompA	; TIMER0 COMPA
 	reti			; TIMER0 COMPB
 	reti			; TIMER0 OVF
 	reti			; SPI STC
@@ -46,7 +46,15 @@
 	reti			; TWI
 	reti			; SPM READY
 
+;;----------------------------------------------------------
+
+IntrTimer0CompA:
+	reti
+
+;;----------------------------------------------------------
+
 Main:
+	rcall	InitTimer0
 	ldi	r16, 0b00100000
 	out	DDRB, r16
 Loop:
@@ -56,5 +64,17 @@ Loop:
 	ldi	r16, 0b00100000
 	rjmp	Loop
 
-Start:
-	rjmp	Start
+;;----------------------------------------------------------
+
+InitTimer0:
+	ldi	r16, 1<<DDD5	; Set OC0B pin to output
+	out	DDRD, r16
+ 	ldi	r16, (1<<COM0A1)|(1<<COM0B1)|(1<<WGM01)|(1<<WGM00)
+	out	TCCR0A, r16
+	ldi	r16, (1<<WGM02)|(1<<CS00)
+	out	TCCR0B, r16
+	ldi	r16, 20
+	out	OCR0A, r16
+	ldi	r16, 0
+	out	OCR0B, r16
+	ret
