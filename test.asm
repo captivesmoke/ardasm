@@ -79,6 +79,6 @@ InitTimer0:
 	out	TCCR0B, r16
 	ldi	r16, 19
 	out	OCR0A, r16
-	ldi	r16, 0
+	ldi	r16, 11
 	out	OCR0B, r16
 	ret
