@@ -78,6 +78,8 @@ Reset:
 	sbi	DDRB, DDB5
 	sei
 Loop:
+	sbi	PortB, PB5
+	cbi	PortB, PB5
 	rjmp	Loop
 
 ;;----------------------------------------------------------
