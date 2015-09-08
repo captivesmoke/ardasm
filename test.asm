@@ -2,6 +2,8 @@
 	.include "/usr/share/avra/m328Pdef.inc"
 	.list
 
+	.equ	NPixels = 256
+	
 ;; Ard                               328                                Ard
 ;; Reset        (PCINT14/RESET) PC6 |1  28| PC5 (ADC5/SCL/PCINT13)       A5
 ;; D0(RX)         (PCINT16/RXD) PD0 |2  27| PC4 (ADC4/SDA/PCINT12)       A4
@@ -49,6 +51,8 @@
 ;;----------------------------------------------------------
 
 IntrTimer0CompA:
+	sbi	PortB, PB5
+	cbi	PortB, PB5
 	reti
 
 ;;----------------------------------------------------------
@@ -59,20 +63,19 @@ Reset:
 	ldi	r16, low(RAMEND)
 	out	SPL, r16
 	rcall	InitTimer0
-	ldi	r16, 0b00100000
-	out	DDRB, r16
+	;; ldi	r16, 0b00100000
+	;; out	DDRB, r16
+	sbi	DDRB, DDB5
+	sei
 Loop:
-	out     PortB, r16
-	ldi	r16, 0b00000000
-	out	PortB, r16
-	ldi	r16, 0b00100000
 	rjmp	Loop
 
 ;;----------------------------------------------------------
 
 InitTimer0:
-	ldi	r16, 1<<DDD5	; Set OC0B pin to output
-	out	DDRD, r16
+	;; ldi	r16, 1<<DDD5	; Set OC0B pin to output
+	;; out	DDRD, r16
+	sbi	DDRD, DDD5
  	ldi	r16, (1<<COM0A1)|(1<<COM0B1)|(1<<WGM01)|(1<<WGM00)
 	out	TCCR0A, r16
 	ldi	r16, (1<<WGM02)|(1<<CS00)
@@ -81,4 +84,14 @@ InitTimer0:
 	out	OCR0A, r16
 	ldi	r16, 11
 	out	OCR0B, r16
+	ldi	r16, (1<<OCIE0A)
+	sts	TIMSK0, r16
 	ret
+
+;;==========================================================
+
+	.dseg
+Neo_Data:
+	.byte	3*NPixels
+
+;;==========================================================
