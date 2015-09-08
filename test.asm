@@ -36,8 +36,8 @@
 	reti			; TIMER1 COMPB
 	reti			; TIMER1 OVF
 	rjmp	IntrTimer0CompA	; TIMER0 COMPA
-	reti			; TIMER0 COMPB
-	reti			; TIMER0 OVF
+	rjmp	IntrTimer0CompB	; TIMER0 COMPB
+	rjmp	IntrTimer0Ovf	; TIMER0 OVF
 	reti			; SPI STC
 	reti			; USART RX
 	reti			; USART UDRE
@@ -51,6 +51,16 @@
 ;;----------------------------------------------------------
 
 IntrTimer0CompA:
+	sbi	PortB, PB5
+	cbi	PortB, PB5
+	reti
+
+IntrTimer0CompB:
+	sbi	PortB, PB5
+	cbi	PortB, PB5
+	reti
+
+IntrTimer0Ovf:
 	sbi	PortB, PB5
 	cbi	PortB, PB5
 	reti
@@ -75,16 +85,16 @@ Loop:
 InitTimer0:
 	;; ldi	r16, 1<<DDD5	; Set OC0B pin to output
 	;; out	DDRD, r16
-	sbi	DDRD, DDD5
+	sbi	DDRD, DDD5	; Set OC0B pin to output
  	ldi	r16, (1<<COM0A1)|(1<<COM0B1)|(1<<WGM01)|(1<<WGM00)
-	out	TCCR0A, r16
+	out	TCCR0A, r16	; Configure timer
 	ldi	r16, (1<<WGM02)|(1<<CS00)
 	out	TCCR0B, r16
-	ldi	r16, 19
+	ldi	r16, 19		; Set timer period
 	out	OCR0A, r16
-	ldi	r16, 6
+	ldi	r16, 6		; Set duty cycle
 	out	OCR0B, r16
-	ldi	r16, (1<<OCIE0A)
+	ldi	r16, (1<<OCIE0A)|(1<<OCIE0B)|(1<<TOIE0) ; Enable interrupt
 	sts	TIMSK0, r16
 	ret
 
