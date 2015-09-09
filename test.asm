@@ -22,31 +22,57 @@
 
 ;; Interrupt vector table
 	rjmp	Reset		; RESET
+	nop
 	reti			; INT0
+	nop
 	reti			; INT1
+	nop
 	reti			; PCINT0
+	nop
 	reti			; PCINT1
+	nop
 	reti			; PCINT2
+	nop
 	reti			; WDT
+	nop
 	reti			; TIMER2 COMPA
+	nop
 	reti			; TIMER2 COMPB
+	nop
 	reti			; TIMER2 OVF
+	nop
 	reti			; TIMER1 CAPT
+	nop
 	reti			; TIMER1 COMPA
+	nop
 	reti			; TIMER1 COMPB
+	nop
 	reti			; TIMER1 OVF
+	nop
 	rjmp	IntrTimer0CompA	; TIMER0 COMPA
+	nop
 	rjmp	IntrTimer0CompB	; TIMER0 COMPB
+	nop
 	rjmp	IntrTimer0Ovf	; TIMER0 OVF
+	nop
 	reti			; SPI STC
+	nop
 	reti			; USART RX
+	nop
 	reti			; USART UDRE
+	nop
 	reti			; USART TX
+	nop
 	reti			; ADC
+	nop
 	reti			; EE READY
+	nop
 	reti			; ANALOG COMP
+	nop
 	reti			; TWI
+	nop
 	reti			; SPM READY
+	nop
 
 ;;----------------------------------------------------------
 
@@ -78,8 +104,8 @@ Reset:
 	sbi	DDRB, DDB5
 	sei
 Loop:
-	sbi	PortB, PB5
-	cbi	PortB, PB5
+	;; sbi	PortB, PB5
+	;; cbi	PortB, PB5
 	rjmp	Loop
 
 ;;----------------------------------------------------------
