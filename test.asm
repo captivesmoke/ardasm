@@ -49,11 +49,11 @@
 	nop
 	reti			; TIMER1 OVF
 	nop
-	rjmp	IntrTimer0CompA	; TIMER0 COMPA
+	reti			; TIMER0 COMPA
 	nop
-	rjmp	IntrTimer0CompB	; TIMER0 COMPB
+	reti			; TIMER0 COMPB
 	nop
-	rjmp	IntrTimer0Ovf	; TIMER0 OVF
+	reti			; TIMER0 OVF
 	nop
 	reti			; SPI STC
 	nop
@@ -76,55 +76,17 @@
 
 ;;----------------------------------------------------------
 
-IntrTimer0CompA:
-	sbi	PortB, PB5
-	cbi	PortB, PB5
-	reti
-
-IntrTimer0CompB:
-	;; sbi	PortB, PB5
-	;; cbi	PortB, PB5
-	reti
-
-IntrTimer0Ovf:
-	;; sbi	PortB, PB5
-	;; cbi	PortB, PB5
-	reti
-
-;;----------------------------------------------------------
-
 Reset:
 	ldi	r16, high(RAMEND)
 	out	SPH, r16
 	ldi	r16, low(RAMEND)
 	out	SPL, r16
-	rcall	InitTimer0
-	;; ldi	r16, 0b00100000
-	;; out	DDRB, r16
 	sbi	DDRB, DDB5
 	sei
 Loop:
-	;; sbi	PortB, PB5
-	;; cbi	PortB, PB5
+	sbi	PortB, PB5
+	cbi	PortB, PB5
 	rjmp	Loop
-
-;;----------------------------------------------------------
-
-InitTimer0:
-	;; ldi	r16, 1<<DDD5	; Set OC0B pin to output
-	;; out	DDRD, r16
-	sbi	DDRD, DDD5	; Set OC0B pin to output
- 	ldi	r16, (1<<COM0A1)|(1<<COM0B1)|(1<<WGM01)|(1<<WGM00)
-	out	TCCR0A, r16	; Configure timer
-	ldi	r16, (1<<WGM02)|(1<<CS00)
-	out	TCCR0B, r16
-	ldi	r16, 19		; Set timer period
-	out	OCR0A, r16
-	ldi	r16, 6		; Set duty cycle
-	out	OCR0B, r16
-	ldi	r16, (1<<OCIE0A)|(1<<OCIE0B)|(1<<TOIE0) ; Enable interrupt
-	sts	TIMSK0, r16
-	ret
 
 ;;==========================================================
 
