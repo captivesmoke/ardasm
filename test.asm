@@ -81,12 +81,27 @@ Reset:
 	out	SPH, r16
 	ldi	r16, low(RAMEND)
 	out	SPL, r16
-	sbi	DDRB, DDB5
-	sei
-Loop:
-	sbi	PortB, PB5
+	ldi	r16, (1<<DDB5)|(1<<DDB4)
+	out	DDRB, r16
+Loop0:	
+	ldi	r24, 3		; Load pixel counter
+	ldi	r25, 0
+	ldi	r26, high(Neo_Data) ; Load pixel data address
+	ldi	r27, low(Neo_Data)
+Loop1:
+	ld	r23, X+		; Load byte from pixel data
+	ldi	r22, 8		; Load bit counter
+Loop2:
+	sbi	PortB, PB5	; Blink the led
 	cbi	PortB, PB5
-	rjmp	Loop
+	lsl	r23		; Shift the data byte
+	dec	r22		; Count the bit
+	brne	Loop2
+	sbiw	r24, 1
+	brne	Loop1
+	sbi	PortB, PB4
+	cbi	PortB, PB4
+	rjmp	Loop0
 
 ;;==========================================================
 
