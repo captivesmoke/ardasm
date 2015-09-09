@@ -77,13 +77,13 @@
 ;;----------------------------------------------------------
 
 IntrTimer0CompA:
-	sbi	PortB, PB5
-	cbi	PortB, PB5
+	;; sbi	PortB, PB5
+	;; cbi	PortB, PB5
 	reti
 
 IntrTimer0CompB:
-	sbi	PortB, PB5
-	cbi	PortB, PB5
+	;; sbi	PortB, PB5
+	;; cbi	PortB, PB5
 	reti
 
 IntrTimer0Ovf:
