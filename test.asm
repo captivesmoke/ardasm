@@ -97,8 +97,8 @@ Loop0:
 	cbi	PortB, PB5
 	ldi	r25, high(3*NPixels) ; Load pixel counter
 	ldi	r24, low(3*NPixels)
-	ldi	r27, high(Neo_Data) ; Load pixel data address
-	ldi	r26, low(Neo_Data)
+	ldi	XH, high(Neo_Data) ; Load pixel data address
+	ldi	XL, low(Neo_Data)
 	ldi	r16, 0b00110011
 	st	X, r16
 Loop1:
