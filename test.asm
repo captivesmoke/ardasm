@@ -20,6 +20,15 @@
 ;; D7            (PCINT23/AIN1) PD7 |13 16| PB2 (SS/OC1B/PCINT2)   (PWM)D10
 ;; D8        (PCINT0/CLKO/ICP1) PB0 |14 15| PB1 (OC1A/PCINT1)       (PWM)D9
 
+;;----------------------------------------------------------
+;; nopn n - n nop's
+.macro nopn
+	.if @0 > 0
+	nop
+	nopn	@0-1
+	.endif
+.endmacro
+
 ;; Interrupt vector table
 	rjmp	Reset		; RESET
 	nop
@@ -81,7 +90,7 @@ Reset:
 	out	SPH, r16
 	ldi	r16, low(RAMEND)
 	out	SPL, r16
-	ldi	r16, (1<<DDB5)|(1<<DDB4)
+	ldi	r16, (1<<DDB5)|(1<<DDB4)|(1<<DDB3)
 	out	DDRB, r16
 Loop0:	
 	ldi	r24, 3		; Load pixel counter
@@ -94,7 +103,15 @@ Loop1:
 Loop2:
 	sbi	PortB, PB5	; Blink the led
 	cbi	PortB, PB5
+	sbi	PortB, PB3
+	nopn	1
 	lsl	r23		; Shift the data byte
+	brcs	BitOne
+	cbi	PortB, PB3
+	nopn	1
+BitOne:
+	cbi	PortB, PB3
+	nopn	1
 	dec	r22		; Count the bit
 	brne	Loop2
 	sbiw	r24, 1
