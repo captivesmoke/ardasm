@@ -93,31 +93,31 @@ Reset:
 	ldi	r16, (1<<DDB5)|(1<<DDB4)|(1<<DDB3)
 	out	DDRB, r16
 Loop0:	
-	ldi	r24, 3		; Load pixel counter
-	ldi	r25, 0
-	ldi	r26, high(Neo_Data) ; Load pixel data address
-	ldi	r27, low(Neo_Data)
+	sbi	PortB, PB5	; Blink the led
+	cbi	PortB, PB5
+	ldi	r25, high(3*NPixels) ; Load pixel counter
+	ldi	r24, low(3*NPixels)
+	ldi	r27, high(Neo_Data) ; Load pixel data address
+	ldi	r26, low(Neo_Data)
+	ldi	r16, 0b00110011
+	st	X, r16
 Loop1:
 	ld	r23, X+		; Load byte from pixel data
 	ldi	r22, 8		; Load bit counter
 Loop2:
-	sbi	PortB, PB5	; Blink the led
-	cbi	PortB, PB5
 	sbi	PortB, PB3
-	nopn	1
+	nopn	1		; High time 0 bit
 	lsl	r23		; Shift the data byte
 	brcs	BitOne
 	cbi	PortB, PB3
-	nopn	1
+	nopn	1		; Difference between 0 & 1 high time
 BitOne:
 	cbi	PortB, PB3
-	nopn	1
+	nopn	1		; Low time 1 bit
 	dec	r22		; Count the bit
 	brne	Loop2
 	sbiw	r24, 1
 	brne	Loop1
-	sbi	PortB, PB4
-	cbi	PortB, PB4
 	rjmp	Loop0
 
 ;;==========================================================
