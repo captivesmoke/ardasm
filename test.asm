@@ -95,6 +95,12 @@ Reset:
 Loop0:	
 	sbi	PortB, PB5	; Blink the led
 	cbi	PortB, PB5
+	icall	WritePix
+	rjmp	Loop0
+
+;;----------------------------------------------------------
+
+WritePix:
 	ldi	r25, high(3*NPixels) ; Load pixel counter
 	ldi	r24, low(3*NPixels)
 	ldi	XH, high(Neo_Data) ; Load pixel data address
@@ -118,7 +124,7 @@ BitOne:
 	brne	Loop2
 	sbiw	r24, 1
 	brne	Loop1
-	rjmp	Loop0
+	ret
 
 ;;==========================================================
 
