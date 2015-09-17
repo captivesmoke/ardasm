@@ -95,7 +95,7 @@ Reset:
 Loop0:	
 	sbi	PortB, PB5	; Blink the led
 	cbi	PortB, PB5
-	icall	WritePix
+	rcall	WritePix
 	rjmp	Loop0
 
 ;;----------------------------------------------------------
