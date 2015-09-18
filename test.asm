@@ -3,6 +3,9 @@
 	.list
 
 	.equ	NPixels = 256
+	.equ	Fosc = 16000000
+	.equ	BaudRate = 57142 ; Approximately 57600
+	.equ	BaudDivisor = Fosc/(8*BaudRate) - 1
 	
 ;; Ard                               328                                Ard
 ;; Reset        (PCINT14/RESET) PC6 |1  28| PC5 (ADC5/SCL/PCINT13)       A5
@@ -92,6 +95,7 @@ Reset:
 	out	SPL, r16
 	ldi	r16, (1<<DDB5)|(1<<DDB4)|(1<<DDB3)
 	out	DDRB, r16
+	rcall	InitUSART
 Loop0:	
 	sbi	PortB, PB5	; Blink the led
 	cbi	PortB, PB5
@@ -124,6 +128,19 @@ BitOne:
 	brne	Loop2
 	sbiw	r24, 1
 	brne	Loop1
+	ret
+
+;;----------------------------------------------------------
+
+InitUSART:
+	ldi	r16, high(BaudDivisor) ; Set baud rate
+	sts	UBRR0H, r16
+	ldi	r16, low(BaudDivisor)
+	sts	UBRR0L, r16
+	ldi	r16, (1<<RXEN0)|(1<<TXEN0) ; Enable transmitter & receiver
+	sts	UCSR0B, r16
+	ldi	r16, (3<<UCSZ00) ; Set 8N1 data format
+	sts	UCSR0C, r16
 	ret
 
 ;;==========================================================
