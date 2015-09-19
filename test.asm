@@ -143,6 +143,8 @@ InitUSART:
 	sts	UBRR0H, r16
 	ldi	r16, low(BaudDivisor)
 	sts	UBRR0L, r16
+	ldi	r16, (1<<U2X0)
+	sts	UCSR0A, r16
 	ldi	r16, (1<<RXEN0)|(1<<TXEN0) ; Enable transmitter & receiver
 	sts	UCSR0B, r16
 	ldi	r16, (3<<UCSZ00) ; Set 8N1 data format
