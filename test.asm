@@ -99,7 +99,13 @@ Reset:
 Loop0:	
 	sbi	PortB, PB5	; Blink the led
 	cbi	PortB, PB5
-	rcall	WritePix
+	;; rcall	WritePix
+USART_Transmit:
+	lds	r16, UCSR0A
+	sbrs	r16, UDRE0
+	rjmp	USART_Transmit
+	ldi	r16, 'A'
+	sts	UDR0, r16
 	rjmp	Loop0
 
 ;;----------------------------------------------------------
