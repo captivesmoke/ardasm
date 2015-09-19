@@ -147,7 +147,7 @@ InitUSART:
 	sts	UCSR0A, r16
 	ldi	r16, (1<<RXEN0)|(1<<TXEN0) ; Enable transmitter & receiver
 	sts	UCSR0B, r16
-	ldi	r16, (3<<UCSZ00) ; Set 8N1 data format
+	ldi	r16, (1<<USBS0)|(3<<UCSZ00) ; Set 8N2 data format
 	sts	UCSR0C, r16
 	ret
 
