@@ -32,6 +32,8 @@
 	.endif
 .endmacro
 
+;;==========================================================
+
 ;; Interrupt vector table
 	rjmp	Reset		; RESET
 	nop
@@ -89,7 +91,7 @@
 ;;----------------------------------------------------------
 
 Reset:
-	ldi	r16, high(RAMEND)
+	ldi	r16, high(RAMEND) ; Setup stack pointer
 	out	SPH, r16
 	ldi	r16, low(RAMEND)
 	out	SPL, r16
@@ -115,7 +117,7 @@ WritePix:
 	ldi	r24, low(3*NPixels)
 	ldi	XH, high(Neo_Data) ; Load pixel data address
 	ldi	XL, low(Neo_Data)
-	ldi	r16, 0b00110011
+	ldi	r16, 0b00110011	; Some data to view on the oscope
 	st	X, r16
 Loop1:
 	ld	r23, X+		; Load byte from pixel data
