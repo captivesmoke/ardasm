@@ -102,8 +102,6 @@ Loop0:
 	sbi	PortB, PB5	; Blink the led
 	cbi	PortB, PB5
 	rcall	Delay50u
-	sbi	PortB, PB5
-	cbi	PortB, PB5
 	rcall	WritePix
 USART_Transmit:
 	lds	r16, UCSR0A
@@ -161,6 +159,7 @@ InitUSART:
 Delay50u:
 	ldi	r16, 50
 DlyLoop:
+	nopn	13
 	dec	r16
 	brne	DlyLoop
 	ret
