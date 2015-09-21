@@ -101,6 +101,9 @@ Reset:
 Loop0:	
 	sbi	PortB, PB5	; Blink the led
 	cbi	PortB, PB5
+	rcall	Delay50u
+	sbi	PortB, PB5
+	cbi	PortB, PB5
 	rcall	WritePix
 USART_Transmit:
 	lds	r16, UCSR0A
@@ -151,6 +154,15 @@ InitUSART:
 	sts	UCSR0B, r16
 	ldi	r16, (1<<USBS0)|(3<<UCSZ00) ; Set 8N2 data format
 	sts	UCSR0C, r16
+	ret
+
+;;----------------------------------------------------------
+
+Delay50u:
+	ldi	r16, 50
+DlyLoop:
+	dec	r16
+	brne	DlyLoop
 	ret
 
 ;;==========================================================
