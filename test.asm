@@ -103,12 +103,18 @@ Loop0:
 	cbi	PortB, PB5
 	rcall	Delay50u
 	rcall	WritePix
+	ldi	r17, 0
+USART_Receive:
+	lds	r16, UCSR0A
+	sbrs	r16,UDRE0
+	rjmp	USART_Receive
+	lds	r17, UDR0
 USART_Transmit:
 	lds	r16, UCSR0A
 	sbrs	r16, UDRE0
 	rjmp	USART_Transmit
-	ldi	r16, 'A'
-	sts	UDR0, r16
+	;; ldi	r16, 'A'
+	sts	UDR0, r17
 	rjmp	Loop0
 
 ;;----------------------------------------------------------
