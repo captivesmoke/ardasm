@@ -110,12 +110,24 @@ USART_Receive:
 	rjmp	USART_Receive
 	lds	r17, UDR0
 USART_Transmit:
+	lds	r16, UCSR0B
+	sbr	r16, TXEN0
+	sts	UCSR0B, r16
 	lds	r16, UCSR0A
 	sbrs	r16, UDRE0
 	rjmp	USART_Transmit
 	;; ldi	r16, 'A'
-	sts	UDR0, r17
+LoopUTx:
+	lds	r16, UCSR0A
+	sbrs	r16, TXC0
+	rjmp	LoopUTx
+	sbr	r16, TXC0
+	sts	UCSR0A, r16
+	lds	r16, UCSR0B
+	cbr	r16, TXEN0
+	sts	UCSR0B, r16
 	rjmp	Loop0
+	
 
 ;;----------------------------------------------------------
 
