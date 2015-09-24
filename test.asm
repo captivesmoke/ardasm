@@ -103,28 +103,28 @@ Loop0:
 	cbi	PortB, PB5
 	rcall	Delay50u
 	rcall	WritePix
-	ldi	r17, 0
 USART_Receive:
 	lds	r16, UCSR0A
-	sbrs	r16,UDRE0
+	sbrs	r16, RXC0	; Check if data has been received
 	rjmp	USART_Receive
-	lds	r17, UDR0
+	lds	r17, UDR0	; Put data into a register
 USART_Transmit:
 	lds	r16, UCSR0B
-	sbr	r16, TXEN0
+	sbr	r16, TXEN0	; Enable transmitter
 	sts	UCSR0B, r16
+	sts	UDR0, r17	; Put data into transmit buffer
 	lds	r16, UCSR0A
-	sbrs	r16, UDRE0
+	sbrs	r16, UDRE0	; Check if data has been sent
 	rjmp	USART_Transmit
 	;; ldi	r16, 'A'
 LoopUTx:
 	lds	r16, UCSR0A
-	sbrs	r16, TXC0
+	sbrs	r16, TXC0	; Check if transmit is complete
 	rjmp	LoopUTx
-	sbr	r16, TXC0
+	sbr	r16, TXC0	; Reset transmit complete flag
 	sts	UCSR0A, r16
 	lds	r16, UCSR0B
-	cbr	r16, TXEN0
+	cbr	r16, TXEN0	; Disable transmitter
 	sts	UCSR0B, r16
 	rjmp	Loop0
 	
